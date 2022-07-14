@@ -8,6 +8,8 @@ const mongoDB = "mongodb://localhost:27017/mestodb";
 const { PORT = 3000 } = process.env;
 const app = express();
 
+const userRouter = require("./routes/users");
+
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -16,5 +18,7 @@ mongoose.connect(mongoDB, {
   useCreateIndex: true,
   useUnifiedTopology: true,
 });
+
+app.use("/users", userRouter);
 
 app.listen(PORT);
