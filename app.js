@@ -9,6 +9,7 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 const userRouter = require("./routes/users");
+const cardRouter = require("./routes/cards");
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -20,5 +21,6 @@ mongoose.connect(mongoDB, {
 });
 
 app.use("/users", userRouter);
+app.use("/cards", cardRouter);
 
 app.listen(PORT);
