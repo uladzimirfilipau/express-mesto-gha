@@ -1,51 +1,47 @@
 const User = require("../models/user");
 
-const NotFoundError = require("../errors/NotFoundError");
-const BadRequestError = require("../errors/BadRequestError");
-const InternalServerError = require("../errors/InternalServerError");
-
-module.exports.getUsers = (req, res, next) => {
+module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch(() => {
-      next(new InternalServerError());
-    });
+    .catch((err) => res.send(err));
 };
 
-module.exports.getUser = (req, res, next) => {
+module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        next(new NotFoundError("Пользователь по указанному _id не найден"));
+        return res.status(404).send({
+          message: "Пользователь по указанному _id не найден",
+        });
       }
-      res.send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        next(new BadRequestError("Передан несуществующий _id"));
+        return res.status(400).send({
+          message: "Переданы некорректные данные для создания пользователя",
+        });
       }
-      next(new InternalServerError());
+      return res.send(err);
     });
 };
 
-module.exports.createUser = (req, res, next) => {
+module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        next(
-          new BadRequestError(
-            "Переданы некорректные данные для создания пользователя"
-          )
-        );
+        return res.status(400).send({
+          message: "Переданы некорректные данные для создания пользователя",
+        });
       }
-      next(new InternalServerError());
+      return res.send(err);
     });
 };
 
-module.exports.updateUserInfo = (req, res, next) => {
+module.exports.updateUserInfo = (req, res) => {
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(
@@ -58,23 +54,23 @@ module.exports.updateUserInfo = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        next(new NotFoundError("Пользователь по указанному _id не найден"));
+        return res.status(404).send({
+          message: "Пользователь по указанному _id не найден",
+        });
       }
-      res.send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        next(
-          new BadRequestError(
-            "Переданы некорректные данные для обновления профиля"
-          )
-        );
+        return res.status(400).send({
+          message: "Переданы некорректные данные для обновления профиля",
+        });
       }
-      next(new InternalServerError());
+      return res.send(err);
     });
 };
 
-module.exports.updateAvatar = (req, res, next) => {
+module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(
@@ -87,18 +83,18 @@ module.exports.updateAvatar = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        next(new NotFoundError("Пользователь по указанному _id не найден"));
+        return res.status(404).send({
+          message: "Пользователь по указанному _id не найден",
+        });
       }
-      res.send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        next(
-          new BadRequestError(
-            "Переданы некорректные данные при обновлении аватара"
-          )
-        );
+        return res.status(400).send({
+          message: "Переданы некорректные данные для обновления аватара",
+        });
       }
-      next(new InternalServerError());
+      return res.send(err);
     });
 };
