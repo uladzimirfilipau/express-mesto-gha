@@ -1,5 +1,11 @@
-[![Tests for sprint 13](https://github.com/uladzimirfilipau/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/uladzimirfilipau/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests for sprint 14](https://github.com/uladzimirfilipau/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/uladzimirfilipau/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
+[![Tests for sprint 13](https://github.com/uladzimirfilipau/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/uladzimirfilipau/express-mesto-gha/actions/workflows/tests-13-sprint.yml)
 # Проект Mesto бэкенд
+Сделан в рамках шестого курса обучения в Яндекс Практикуме.
+
+## Технологии
+- Node.js
+- express.js
+- Mongo DB
 
 ## Директории
 
