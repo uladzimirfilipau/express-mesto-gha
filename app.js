@@ -31,4 +31,9 @@ app.use((req, res, next) => {
 app.use("/users", userRouter);
 app.use("/cards", cardRouter);
 
+app.use("*", (req, res) => {
+  res.status(404);
+  res.send("Page not Found");
+});
+
 app.listen(PORT);
