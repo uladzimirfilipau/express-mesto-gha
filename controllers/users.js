@@ -1,28 +1,43 @@
-const User = require("../models/user");
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable comma-dangle */
+const User = require('../models/user');
+
+const {
+  badRequestError,
+  notFoundError,
+  serverError,
+} = require('../errors/errors');
 
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch((err) => res.send(err));
+    .catch(() =>
+      res.status(serverError).send({
+        message: 'На сервере произошла ошибка',
+      })
+    );
 };
 
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        return res.status(404).send({
-          message: "Пользователь по указанному _id не найден",
+        return res.status(notFoundError).send({
+          message: 'Пользователь по указанному _id не найден',
         });
       }
       return res.send(user);
     })
     .catch((err) => {
-      if (err.name === "CastError") {
-        return res.status(400).send({
-          message: "Переданы некорректные данные для создания пользователя",
+      if (err.name === 'CastError') {
+        return res.status(badRequestError).send({
+          message: 'Переданы некорректные данные для создания пользователя',
         });
       }
-      return res.send(err);
+      return res.status(serverError).send({
+        message: 'На сервере произошла ошибка',
+      });
     });
 };
 
@@ -32,12 +47,15 @@ module.exports.createUser = (req, res) => {
   User.create({ name, about, avatar })
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        return res.status(400).send({
-          message: "Переданы некорректные данные для создания пользователя",
+      if (err.name === 'ValidationError') {
+        return res.status(badRequestError).send({
+          message:
+            'Переданы некорректные данные Имя, Профессия или Аватар для создания профиля пользователя',
         });
       }
-      return res.send(err);
+      return res.status(serverError).send({
+        message: 'На сервере произошла ошибка',
+      });
     });
 };
 
@@ -54,19 +72,22 @@ module.exports.updateUserInfo = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        return res.status(404).send({
-          message: "Пользователь по указанному _id не найден",
+        return res.status(notFoundError).send({
+          message: 'Пользователь по указанному _id не найден',
         });
       }
       return res.send(user);
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        return res.status(400).send({
-          message: "Переданы некорректные данные для обновления профиля",
+      if (err.name === 'ValidationError') {
+        return res.status(badRequestError).send({
+          message:
+            'Переданы некорректные данные Имя или Профессия для обновления профиля пользователя',
         });
       }
-      return res.send(err);
+      return res.status(serverError).send({
+        message: 'На сервере произошла ошибка',
+      });
     });
 };
 
@@ -83,18 +104,22 @@ module.exports.updateAvatar = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        return res.status(404).send({
-          message: "Пользователь по указанному _id не найден",
+        return res.status(notFoundError).send({
+          message: 'Пользователь по указанному _id не найден',
         });
       }
-      return res.send(user);
+      return res.status(serverError).send({
+        message: 'На сервере произошла ошибка',
+      });
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        return res.status(400).send({
-          message: "Переданы некорректные данные для обновления аватара",
+      if (err.name === 'ValidationError') {
+        return res.status(badRequestError).send({
+          message: 'Переданы некорректные данные для обновления аватара',
         });
       }
-      return res.send(err);
+      return res.status(serverError).send({
+        message: 'На сервере произошла ошибка',
+      });
     });
 };
